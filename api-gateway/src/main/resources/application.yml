@@ -1,0 +1,23 @@
+server:
+  port: 5555
+  
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: microservice-api-1
+          uri: lb://MICROSERVICE-1
+          predicates:
+            - Path=/micro1/**
+          filters:
+            - RewritePath=/micro1/(?<segment>.*), /${segment}
+        
+        - id: microservice-api-2	 #this id should be unique
+          uri: lb://MICROSERVICE-2   #this is your microservice name here lb stands for load balancer
+          predicates:
+            - Path=/micro2/**        #this is user defined we can write anything instead of micro2
+          filters:
+            - RewritePath=/micro2/(?<segment>.*), /${segment}
